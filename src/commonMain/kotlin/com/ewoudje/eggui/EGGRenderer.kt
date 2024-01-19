@@ -2,5 +2,5 @@ package com.ewoudje.eggui
 
 
 interface EGGRenderer {
-    fun renderAsset(asset: EGGRenderAssetDescriptor, pos: Pos)
+    fun renderAsset(asset: EGGRenderAsset, pos: Pos)
 }

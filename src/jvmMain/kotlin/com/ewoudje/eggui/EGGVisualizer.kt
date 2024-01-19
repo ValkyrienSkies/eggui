@@ -2,7 +2,7 @@ package com.ewoudje.eggui
 
 import com.ewoudje.eggui.components.RootContainer
 import com.ewoudje.eggui.components.containers.*
-import com.ewoudje.eggui.components.elements.RectangleDescriptor
+import com.ewoudje.eggui.components.elements.RectangleAsset
 import com.ewoudje.eggui.components.elements.rectangle
 import com.ewoudje.eggui.frontend.invoke
 import com.ewoudje.eggui.frontend.rem
@@ -41,12 +41,12 @@ data object EGGVisualizer : JFrame("EGG Visualizer") {
     }
 
     class VisualizerRenderer(val g: Graphics): EGGRenderer {
-        override fun renderAsset(asset: EGGRenderAssetDescriptor, pos: Pos) {
+        override fun renderAsset(asset: EGGRenderAsset, pos: Pos) {
             fun Float.u() = ceil(this * g.clipBounds.width).toInt()
             fun Float.v() = ceil(this * yVsX * g.clipBounds.height).toInt()
 
             when (asset) {
-                is RectangleDescriptor -> {
+                is RectangleAsset -> {
                     g.color = Color(asset.color)
                     println("Rectangle: ${pos.x.u()}, ${pos.y.v()} : ${asset.size.width.u()}, ${asset.size.height.v()}")
                     g.fillRect(pos.x.u(), pos.y.v(), asset.size.width.u(), asset.size.height.v())
@@ -55,9 +55,6 @@ data object EGGVisualizer : JFrame("EGG Visualizer") {
         }
     }
 }
-
-class RectangleAsset(val size: CalculatedSize, val color: Color) : EGGAsset<RectangleDescriptor>
-
 
 fun main(args: Array<String>) {
     EGGVisualizer.isVisible = true

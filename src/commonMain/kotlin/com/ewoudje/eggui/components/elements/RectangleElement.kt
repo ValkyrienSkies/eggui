@@ -10,7 +10,7 @@ import com.ewoudje.eggui.frontend.EGGBuilderMarker
 import java.util.UUID
 import kotlin.random.Random
 
-data class RectangleDescriptor(val size: CalculatedSize, val color: Int): EGGRenderAssetDescriptor
+data class RectangleAsset(val size: CalculatedSize, val color: Int): EGGRenderAsset
 
 class RectangleElement(override val parent: EGGContainerParent, override val childId: Int) : EGGFillingElement, EGGFixedElement {
     var color = 0
@@ -19,7 +19,7 @@ class RectangleElement(override val parent: EGGContainerParent, override val chi
         when (context.pass) {
             is EGGPass.Render -> {
                 val renderer = context.pass
-                renderer.renderAsset(RectangleDescriptor(context.size, color), context.position)
+                renderer.renderAsset(RectangleAsset(context.size, color), context.position)
             }
             else -> {}
         }

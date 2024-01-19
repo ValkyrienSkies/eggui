@@ -1,6 +1,9 @@
 package com.ewoudje.eggui
 
-interface EGGAsset<D: EGGAssetDescriptor>
+interface EGGAsset
+interface EGGRenderAsset: EGGAsset
+interface AssetDescriptor<T: EGGAsset>
 
-interface EGGAssetDescriptor
-interface EGGRenderAssetDescriptor : EGGAssetDescriptor
+interface EGGAssets {
+    operator fun <T: EGGAsset> get(location: AssetDescriptor<T>): T
+}
