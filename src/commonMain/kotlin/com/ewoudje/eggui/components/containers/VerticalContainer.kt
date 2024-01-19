@@ -7,19 +7,19 @@ import com.ewoudje.eggui.components.*
 import com.ewoudje.eggui.frontend.ChildBuilder
 import com.ewoudje.eggui.frontend.EGGBuilderMarker
 
-class VerticalContainer<P: EGGPlatform<P>>(
-    override val parent: EGGContainerParent<P>,
+class VerticalContainer(
+    override val parent: EGGContainerParent,
     override val childId: Int
-) : EGGMultipleContainer<P> {
-    override val children = mutableListOf<EGGChildComponent<P>>()
+) : EGGMultipleContainer {
+    override val children = mutableListOf<EGGChildComponent>()
     private val sizes = mutableListOf<Size>()
 
-    override fun <T : EGGChildComponent<P>> addChild(child: EGGChildConstructor<P, T>): T {
+    override fun <T : EGGChildComponent> addChild(child: EGGChildConstructor<T>): T {
         sizes.add(Size.EMPTY)
         return child(this, children.size).apply(children::add)
     }
 
-    override fun enter(context: EGGContext<P>): EGGContext<P> {
+    override fun enter(context: EGGContext): EGGContext {
         val pos = context.position
         val size = context.size
 
@@ -58,5 +58,5 @@ class VerticalContainer<P: EGGPlatform<P>>(
 }
 
 @EGGBuilderMarker
-val <P: EGGPlatform<P>, T: EGGContainer<P>> T.vertical get() =
+val <T: EGGContainer> T.vertical get() =
     ChildBuilder(this, ::VerticalContainer)

@@ -1,7 +1,7 @@
 package com.ewoudje.eggui
 
 import com.ewoudje.eggui.components.*
-
+/*
 object ContainerVerification {
     private val OMEGA = 0.0001f
 
@@ -97,4 +97,4 @@ object ContainerVerification {
             }
         }
     }
-}
+}*/

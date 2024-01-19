@@ -5,12 +5,12 @@ import com.ewoudje.eggui.components.*
 import com.ewoudje.eggui.frontend.ChildBuilder
 import com.ewoudje.eggui.frontend.EGGBuilderMarker
 
-class SquareContainer<P: EGGPlatform<P>>(
-    override val parent: EGGContainerParent<P>,
+class SquareContainer(
+    override val parent: EGGContainerParent,
     override val childId: Int
-) : EGGSingleContainer<P> {
+) : EGGSingleContainer {
 
-    override var child: EGGChildComponent<P>? = null
+    override var child: EGGChildComponent? = null
         private set
     private var childSize = Size.EMPTY
 
@@ -21,11 +21,11 @@ class SquareContainer<P: EGGPlatform<P>>(
     }
 
     override fun getChildSize(): Size = childSize
-    override fun <T : EGGChildComponent<P>> setChild(child: EGGChildConstructor<P, T>): T {
+    override fun <T : EGGChildComponent> setChild(child: EGGChildConstructor<T>): T {
         return child(this, 0).also { this.child = it }
     }
 
-    override fun enter(context: EGGContext<P>): EGGContext<P> {
+    override fun enter(context: EGGContext): EGGContext {
         var size = context.size
         if (size.width > size.height) {
             size = CalculatedSize(size.height, size.height)
@@ -39,5 +39,5 @@ class SquareContainer<P: EGGPlatform<P>>(
 }
 
 @EGGBuilderMarker
-val <P: EGGPlatform<P>, T: EGGContainer<P>> T.square get() =
+val <T: EGGContainer> T.square get() =
     ChildBuilder(this, ::SquareContainer)

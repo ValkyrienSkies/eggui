@@ -1,6 +1,6 @@
 package com.ewoudje.eggui
 
 
-interface EGGRenderer<P: EGGPlatform<P>> {
-    fun renderAsset(asset: EGGAsset<P, out EGGRenderAssetDescriptor>, pos: Pos)
+interface EGGRenderer {
+    fun renderAsset(asset: EGGRenderAssetDescriptor, pos: Pos)
 }

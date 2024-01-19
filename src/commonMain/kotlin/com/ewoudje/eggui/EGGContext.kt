@@ -1,11 +1,10 @@
 package com.ewoudje.eggui
 
-class EGGContext<P: EGGPlatform<P>> (
-    private val platform: P,
+class EGGContext (
     private val positions: List<Pos>,
     private val sizes: List<CalculatedSize>,
-    val pass: EGGPass<P>
-) : EGGPlatform<P> by platform {
+    val pass: EGGPass
+) {
 
     fun getPosition(childId: Int): Pos {
         return positions[childId]
@@ -15,7 +14,7 @@ class EGGContext<P: EGGPlatform<P>> (
         return sizes[childId]
     }
 
-    fun new(positions: List<Pos>, sizes: List<CalculatedSize>): EGGContext<P> {
-        return EGGContext(platform, positions, sizes, pass)
+    fun new(positions: List<Pos>, sizes: List<CalculatedSize>): EGGContext {
+        return EGGContext(positions, sizes, pass)
     }
 }

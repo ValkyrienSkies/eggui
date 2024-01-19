@@ -4,10 +4,10 @@ import com.ewoudje.eggui.*
 import com.ewoudje.eggui.frontend.EGGBuilderMarker
 
 @EGGBuilderMarker
-sealed interface EGGComponent<P: EGGPlatform<P>>
+sealed interface EGGComponent
 
-sealed interface EGGChildComponent<P: EGGPlatform<P>> : EGGComponent<P> {
-    val parent: EGGContainerParent<P>
+sealed interface EGGChildComponent : EGGComponent {
+    val parent: EGGContainerParent
     val childId: Int
 
     var size get() = parent.getSize(childId)
@@ -27,37 +27,37 @@ sealed interface EGGChildComponent<P: EGGPlatform<P>> : EGGComponent<P> {
         size = Size(SizeElement.Fill(priority), size.height)
     }
 
-    val EGGContext<P>.position get() = getPosition(childId)
-    val EGGContext<P>.size get() = getSize(childId)
+    val EGGContext.position get() = getPosition(childId)
+    val EGGContext.size get() = getSize(childId)
 }
 
-typealias EGGChildConstructor<P, T> = (EGGContainerParent<P>, Int) -> T
+typealias EGGChildConstructor<T> = (EGGContainerParent, Int) -> T
 
-sealed interface EGGElement<P: EGGPlatform<P>> : EGGChildComponent<P> {
-    fun visit(context: EGGContext<P>) {}
+sealed interface EGGElement : EGGChildComponent {
+    fun visit(context: EGGContext) {}
 }
 
-interface EGGFillingElement<P: EGGPlatform<P>> : EGGElement<P>
-interface EGGFixedElement<P: EGGPlatform<P>> : EGGElement<P>
+interface EGGFillingElement : EGGElement
+interface EGGFixedElement : EGGElement
 
-sealed interface EGGContainerParent<P: EGGPlatform<P>> : EGGComponent<P> {
+sealed interface EGGContainerParent : EGGComponent {
     fun updateSize(child: Int, size: Size)
     fun getSize(child: Int): Size
 }
 
-sealed interface EGGContainer<P: EGGPlatform<P>> : EGGChildComponent<P>, EGGContainerParent<P> {
-    fun enter(context: EGGContext<P>): EGGContext<P>
-    fun exit(context: EGGContext<P>) {}
+sealed interface EGGContainer : EGGChildComponent, EGGContainerParent {
+    fun enter(context: EGGContext): EGGContext
+    fun exit(context: EGGContext) {}
 }
 
-interface EGGMultipleContainer<P: EGGPlatform<P>> : EGGContainer<P> {
-    val children: Iterable<EGGChildComponent<P>>
+interface EGGMultipleContainer : EGGContainer {
+    val children: Iterable<EGGChildComponent>
 
-    fun <T: EGGChildComponent<P>> addChild(child: EGGChildConstructor<P, T>): T
+    fun <T: EGGChildComponent> addChild(child: EGGChildConstructor<T>): T
 }
 
-interface EGGSingleContainer<P: EGGPlatform<P>> : EGGContainer<P> {
-    val child: EGGChildComponent<P>?
+interface EGGSingleContainer : EGGContainer {
+    val child: EGGChildComponent?
 
     override fun updateSize(child: Int, size: Size) {
         if (child != 0) throw IndexOutOfBoundsException("SingleContainer can only have one child")
@@ -69,16 +69,16 @@ interface EGGSingleContainer<P: EGGPlatform<P>> : EGGContainer<P> {
         return getChildSize()
     }
 
-    fun <T: EGGChildComponent<P>> setChild(child: EGGChildConstructor<P, T>): T
+    fun <T: EGGChildComponent> setChild(child: EGGChildConstructor<T>): T
     fun updateChildSize(size: Size)
     fun getChildSize(): Size
 }
 
-class RootContainer<P: EGGPlatform<P>> : EGGContainerParent<P> {
-    var child: EGGChildComponent<P>? = null
+class RootContainer : EGGContainerParent {
+    var child: EGGChildComponent? = null
     var size = Size.EMPTY
 
-    fun <T:  EGGChildComponent<P>> setChild(child: EGGChildConstructor<P, T>): T {
+    fun <T:  EGGChildComponent> setChild(child: EGGChildConstructor<T>): T {
         if (this.child != null) throw IllegalStateException("RootContainer can only have one child")
         return child(this, 0).apply { this@RootContainer.child = this }
     }
