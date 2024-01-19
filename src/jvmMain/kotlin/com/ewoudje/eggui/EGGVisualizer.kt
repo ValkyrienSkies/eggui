@@ -4,10 +4,7 @@ import com.ewoudje.eggui.components.RootContainer
 import com.ewoudje.eggui.components.containers.*
 import com.ewoudje.eggui.components.elements.RectangleAsset
 import com.ewoudje.eggui.components.elements.rectangle
-import com.ewoudje.eggui.frontend.invoke
-import com.ewoudje.eggui.frontend.rem
-import com.ewoudje.eggui.frontend.size
-import com.ewoudje.eggui.frontend.traverse
+import com.ewoudje.eggui.frontend.*
 import java.awt.Canvas
 import java.awt.Color
 import java.awt.Graphics
@@ -61,18 +58,20 @@ fun main(args: Array<String>) {
     EGGVisualizer.defaultCloseOperation = EXIT_ON_CLOSE
     EGGVisualizer.root.setChild(::HorizontalContainer).apply {
         vertical {
-            (rectangle size Size.FILL) {
+            rectangle {
+                size = Size(0.1f, 0.6f)
                 color = Color.RED.rgb
             }
 
-            (square % rectangle size Size.FILL) {
+            square[rectangle] {
                 color = Color.GREEN.rgb
+                size = Size(0.1f, 0.6f)
             }
         }
 
         vertical {
-            (square % rectangle size Size.FILL) {
-                color = Color.BLUE.rgb
+            square[rectangle(Color.YELLOW.rgb)] {
+                size = Size.FILL
             }
         }
     }

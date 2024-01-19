@@ -57,7 +57,7 @@ sealed interface SizeElement {
             }
 
             val sizeLeft = max - lastX
-            if (sizeLeft < 0) throw IllegalArgumentException("$elements combined is bigger than $max")
+            if (sizeLeft < -0.00001f) throw IllegalArgumentException("$elements combined is bigger than $max")
             if (fillList.isEmpty() || sizeLeft < 0.00001f) return result.toList()
 
             val fillSum = fillList.sumOf { it.second.toDouble() }.toFloat()
@@ -95,7 +95,6 @@ data class Size(val width: SizeElement, val height: SizeElement) {
 
     companion object {
         val EMPTY = Size(SizeElement.ZERO, SizeElement.ZERO)
-        val FULL = Size(SizeElement(1f), SizeElement(1f))
         val FILL = Size(SizeElement.Fill(), SizeElement.Fill())
 
         operator fun invoke(width: Float, height: Float) = Size(SizeElement(width), SizeElement(height))

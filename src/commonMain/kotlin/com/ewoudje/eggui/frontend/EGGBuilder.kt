@@ -18,28 +18,22 @@ class ChildBuilder< C: EGGContainer, T: EGGComponent>(
 }
 
 @EGGBuilderMarker
-operator fun <C, T, T2> ChildBuilder<C, T>.rem(content: ChildBuilder<C, T2>): ChildBuilder<T, T2>
+operator fun <C, T, T2> ChildBuilder<C, T>.get(content: ChildBuilder<C, T2>): ChildBuilder<T, T2>
         where C: EGGMultipleContainer,
               T: EGGSingleContainer,
               T2: EGGChildComponent
         = ChildBuilder(parent.addChild(constructor), content.constructor)
 
 @EGGBuilderMarker
-@JvmName("multipleContainer")
+@JvmName("multipleContainerInvoke")
 operator fun <C, T> ChildBuilder<C, T>.invoke(block: T.() -> Unit): Unit
     where C: EGGMultipleContainer,
           T: EGGChildComponent
         = parent.addChild(constructor).block()
 
 @EGGBuilderMarker
-@JvmName("singleContainer")
+@JvmName("singleContainerInvoke")
 operator fun <C, T> ChildBuilder<C, T>.invoke(block: T.() -> Unit): Unit
         where C: EGGSingleContainer,
               T: EGGChildComponent
         = parent.setChild(constructor).block()
-
-@EGGBuilderMarker
-infix fun <C, T> ChildBuilder<C, T>.size(size: Size): ChildBuilder<C, T>
-        where C: EGGContainer,
-              T: EGGChildComponent
-        = wrap { it.size = size }
