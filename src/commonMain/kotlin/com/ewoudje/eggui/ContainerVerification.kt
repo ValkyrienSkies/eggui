@@ -1,20 +1,16 @@
 package com.ewoudje.eggui
 
 import com.ewoudje.eggui.components.*
-/*
+
 object ContainerVerification {
     private val OMEGA = 0.0001f
 
-    object TestPlatform : EGGPlatform<TestPlatform> {
-        override fun <T : EGGAssetDescriptor> getAsset(assetDescriptor: T): EGGAsset<TestPlatform, T> =
-            throw NotImplementedError()
-    }
-    private class TestPass(val pos: Pos, val size: CalculatedSize) : EGGPass<TestPlatform> {
+    private class TestPass(val pos: Pos, val size: CalculatedSize) : EGGPass {
         var totalSize = CalculatedSize.ZERO
     }
 
-    fun verify(container: EGGChildConstructor<TestPlatform, out EGGMultipleContainer<TestPlatform>>) {
-        val root = RootContainer<TestPlatform>()
+    fun verify(container: EGGChildConstructor<out EGGMultipleContainer>) {
+        val root = RootContainer()
         val container = root.setChild(container)
 
         container.addChild(::TestElement)
@@ -40,11 +36,11 @@ object ContainerVerification {
         }
 
         fun testContainer(pos: Pos, size: CalculatedSize) {
-            val ctx = EGGContext(TestPlatform,
+            val ctx = EGGContext(
                 listOf(pos), listOf(size),
                 TestPass(pos, size)
             )
-            TestPlatform.traverse(container, ctx)
+            EGGContext.traverse(container, ctx)
         }
 
         setSizes(
@@ -69,11 +65,11 @@ object ContainerVerification {
         testContainer(Pos(0.4f, 0.3f), CalculatedSize(0.9f, 0.8f))
     }
 
-    private class TestElement<P: EGGPlatform<P>>(
-        override val parent: EGGContainerParent<P>,
+    private class TestElement(
+        override val parent: EGGContainerParent,
         override val childId: Int
-    ) : EGGFixedElement<P>, EGGFillingElement<P> {
-        override fun visit(ctx: EGGContext<P>) {
+    ) : EGGFixedElement, EGGFillingElement {
+        override fun visit(ctx: EGGContext) {
             when (ctx.pass) {
                 is TestPass -> {
                     val testSize = ctx.pass.size
@@ -97,4 +93,4 @@ object ContainerVerification {
             }
         }
     }
-}*/
+}

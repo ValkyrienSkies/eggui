@@ -9,7 +9,7 @@ import com.ewoudje.eggui.frontend.EGGBuilderMarker
 class FixedContainer(override val parent: EGGContainerParent, override val childId: Int) : EGGSingleContainer {
     override var child: EGGChildComponent? = null
         private set
-    private var childSize = Size.EMPTY
+    private var childSize = Size.FILL
 
     override fun enter(context: EGGContext): EGGContext =
         context.new(listOf(context.position), listOf(context.size.sameOrSmaller(childSize)))

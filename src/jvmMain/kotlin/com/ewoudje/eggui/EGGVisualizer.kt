@@ -12,12 +12,9 @@ import javax.swing.JFrame
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
 import kotlin.math.ceil
 
-data object EGGVisualizer : JFrame("EGG Visualizer") {
-    private fun readResolve(): Any = EGGVisualizer //idk
+class EGGVisualizer(val renderer: (g: Graphics) -> EGGRenderer) : JFrame("EGG Visualizer") {
     var root = RootContainer()
     val canvas: Canvas
-    val xVsY = (720f / 1280f)
-    val yVsX = (1280f / 720f)
 
     init {
         setSize(1280, 720)
@@ -27,20 +24,24 @@ data object EGGVisualizer : JFrame("EGG Visualizer") {
 
                 val size = CalculatedSize(
                     1f,
-                    xVsY
+                    size.height.toFloat() / size.width.toFloat()
                 )
 
-                val pass = EGGPass.Render(VisualizerRenderer(g))
+                val pass = EGGPass.Render(renderer(g))
                 val ctx = EGGContext(listOf(Pos(0f, 0f)), listOf(size), pass)
-                traverse(root, ctx)
+                EGGContext.traverse(root, ctx)
             }
         }) as Canvas
     }
+}
 
-    class VisualizerRenderer(val g: Graphics): EGGRenderer {
+fun main(args: Array<String>) {
+
+    val yVsX = (1280f / 720f)
+    class SimpleRenderer(val g: Graphics): EGGRenderer {
         override fun renderAsset(asset: EGGRenderAsset, pos: Pos) {
-            fun Float.u() = ceil(this * g.clipBounds.width).toInt()
-            fun Float.v() = ceil(this * yVsX * g.clipBounds.height).toInt()
+            fun Float.u() = ceil(this * g.clip.bounds2D.width).toInt()
+            fun Float.v() = ceil(this * yVsX * g.clip.bounds2D.height).toInt()
 
             when (asset) {
                 is RectangleAsset -> {
@@ -51,21 +52,21 @@ data object EGGVisualizer : JFrame("EGG Visualizer") {
             }
         }
     }
-}
 
-fun main(args: Array<String>) {
-    EGGVisualizer.isVisible = true
-    EGGVisualizer.defaultCloseOperation = EXIT_ON_CLOSE
-    EGGVisualizer.root.setChild(::HorizontalContainer).apply {
+    val visualizer = EGGVisualizer(::SimpleRenderer)
+
+    visualizer.isVisible = true
+    visualizer.defaultCloseOperation = EXIT_ON_CLOSE
+    visualizer.root.setChild(::HorizontalContainer).apply {
         vertical {
             rectangle {
-                size = Size(0.1f, 0.6f)
+                size = Size(0.1f, 0.1f)
                 color = Color.RED.rgb
             }
 
             square[rectangle] {
                 color = Color.GREEN.rgb
-                size = Size(0.1f, 0.6f)
+                size = Size(0.1f, 0.1f)
             }
         }
 
@@ -76,5 +77,5 @@ fun main(args: Array<String>) {
         }
     }
 
-    EGGVisualizer.repaint()
+    visualizer.repaint()
 }

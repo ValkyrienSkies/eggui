@@ -3,10 +3,7 @@ package com.ewoudje.eggui.frontend
 import com.ewoudje.eggui.EGGContext
 import com.ewoudje.eggui.components.*
 
-/**
- * @throws TraverseException
- */
-fun traverse(comp: EGGComponent, ctx: EGGContext) {
+internal fun traverseComponent(comp: EGGComponent, ctx: EGGContext) {
     traverse(comp, ctx, Trace())
 }
 

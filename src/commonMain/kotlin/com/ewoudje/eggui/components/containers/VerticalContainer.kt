@@ -15,7 +15,7 @@ class VerticalContainer(
     private val sizes = mutableListOf<Size>()
 
     override fun <T : EGGChildComponent> addChild(child: EGGChildConstructor<T>): T {
-        sizes.add(Size.EMPTY)
+        sizes.add(Size.FILL)
         return child(this, children.size).apply(children::add)
     }
 

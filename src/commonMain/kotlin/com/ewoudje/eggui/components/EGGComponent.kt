@@ -19,14 +19,6 @@ sealed interface EGGChildComponent : EGGComponent {
     var height get() = size.height
         set(value) { size = Size(size.width, value) }
 
-    fun scaleVertical(priority: Float = 1.0f) {
-        size = Size(size.width, SizeElement.Fill(priority))
-    }
-
-    fun scaleHorizontal(priority: Float = 1.0f) {
-        size = Size(SizeElement.Fill(priority), size.height)
-    }
-
     val EGGContext.position get() = getPosition(childId)
     val EGGContext.size get() = getSize(childId)
 }

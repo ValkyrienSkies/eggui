@@ -1,9 +1,6 @@
 package com.ewoudje.eggui.frontend
 
-import com.ewoudje.eggui.*
 import com.ewoudje.eggui.components.*
-import com.ewoudje.eggui.components.containers.*
-import javax.swing.text.html.HTML.Tag.P
 
 @DslMarker
 annotation class EGGBuilderMarker
