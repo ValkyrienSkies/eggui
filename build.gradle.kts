@@ -18,7 +18,6 @@ repositories {
 
         val vsMavenUsername = project.findProperty("vs_maven_username") as String?
         val vsMavenPassword = project.findProperty("vs_maven_password") as String?
-
         if (vsMavenPassword != null && vsMavenUsername != null) {
             credentials {
                 username = vsMavenUsername
