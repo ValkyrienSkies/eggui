@@ -53,34 +53,28 @@ kotlin {
             }
         }
     }
-}
 
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-}
-
-publishing {
-    repositories {
-        val vsMavenUsername = project.findProperty("vs_maven_username") as String?
-        val vsMavenPassword = project.findProperty("vs_maven_password") as String?
-        val vsMavenUrl = project.findProperty("vs_maven_url") as String?
-        if (vsMavenUrl != null && vsMavenPassword != null && vsMavenUsername != null) {
-            println("Publishing to VS Maven ($version)")
-            maven {
-                url = uri(vsMavenUrl)
-                credentials {
-                    username = vsMavenUsername
-                    password = vsMavenPassword
+    publishing {
+        repositories {
+            val vsMavenUsername = project.findProperty("vs_maven_username") as String?
+            val vsMavenPassword = project.findProperty("vs_maven_password") as String?
+            val vsMavenUrl = project.findProperty("vs_maven_url") as String?
+            if (vsMavenUrl != null && vsMavenPassword != null && vsMavenUsername != null) {
+                println("Publishing to VS Maven ($version)")
+                maven {
+                    url = uri(vsMavenUrl)
+                    credentials {
+                        username = vsMavenUsername
+                        password = vsMavenPassword
+                    }
                 }
             }
         }
     }
+}
 
-    publications {
-        register<MavenPublication>("vsMaven") {
-            from(components["java"])
-        }
-    }
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 fun String.execute(envp: Array<String>? = null, dir: File = projectDir): String {
