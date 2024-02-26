@@ -11,6 +11,7 @@ class HorizontalContainer(
     override val parent: EGGContainerParent,
     override val childId: Int
 ) : EGGMultipleContainer {
+    override val attachment: EGGContainerAttachment = EGGContainerAttachment()
     override val children = mutableListOf<EGGChildComponent>()
     private val sizes = mutableListOf<Size>()
 

@@ -69,6 +69,8 @@ object ContainerVerification {
         override val parent: EGGContainerParent,
         override val childId: Int
     ) : EGGFixedElement, EGGFillingElement {
+        override val attachment: EGGElementAttachment = EGGElementAttachment()
+
         override fun visit(ctx: EGGContext) {
             when (ctx.pass) {
                 is TestPass -> {

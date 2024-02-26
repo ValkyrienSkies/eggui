@@ -7,6 +7,7 @@ import com.ewoudje.eggui.frontend.ChildBuilder
 import com.ewoudje.eggui.frontend.EGGBuilderMarker
 
 class FixedContainer(override val parent: EGGContainerParent, override val childId: Int) : EGGSingleContainer {
+    override val attachment: EGGContainerAttachment = EGGContainerAttachment()
     override var child: EGGChildComponent? = null
         private set
     private var childSize = Size.FILL

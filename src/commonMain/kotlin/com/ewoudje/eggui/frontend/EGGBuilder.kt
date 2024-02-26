@@ -6,7 +6,7 @@ import com.ewoudje.eggui.components.*
 annotation class EGGBuilderMarker
 
 @EGGBuilderMarker
-class ChildBuilder< C: EGGContainer, T: EGGComponent>(
+class ChildBuilder<C: EGGContainer, T: EGGComponent>(
     val parent: C,
     val constructor: EGGChildConstructor<T>
 ) {
@@ -34,3 +34,15 @@ operator fun <C, T> ChildBuilder<C, T>.invoke(block: T.() -> Unit): Unit
         where C: EGGSingleContainer,
               T: EGGChildComponent
         = parent.setChild(constructor).block()
+
+
+@EGGBuilderMarker
+@JvmName("unknownContainerInvoke")
+operator fun <C, T> ChildBuilder<C, T>.invoke(block: T.() -> Unit): Unit
+        where C: EGGContainer,
+              T: EGGChildComponent
+        = when(parent) {
+            is EGGMultipleContainer -> parent.addChild(constructor).block()
+            is EGGSingleContainer -> parent.setChild(constructor).block()
+            else -> throw IllegalStateException("Unknown container type")
+        }

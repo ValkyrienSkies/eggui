@@ -4,7 +4,19 @@ import com.ewoudje.eggui.*
 import com.ewoudje.eggui.frontend.EGGBuilderMarker
 
 @EGGBuilderMarker
-sealed interface EGGComponent
+sealed interface EGGComponent{
+    val attachment: EGGComponentAttachment
+}
+
+sealed interface EGGComponentAttachment
+open class EGGContainerAttachment(
+    var onEnter: (EGGPass) -> Boolean = {false},
+    var onExit: (EGGPass) -> Boolean = {false}
+): EGGComponentAttachment
+
+open class EGGElementAttachment(
+    var onVisit: (EGGPass) -> Boolean = {false}
+): EGGComponentAttachment
 
 sealed interface EGGChildComponent : EGGComponent {
     val parent: EGGContainerParent
@@ -26,6 +38,8 @@ sealed interface EGGChildComponent : EGGComponent {
 typealias EGGChildConstructor<T> = (EGGContainerParent, Int) -> T
 
 sealed interface EGGElement : EGGChildComponent {
+    override val attachment: EGGElementAttachment
+
     fun visit(context: EGGContext) {}
 }
 
@@ -38,6 +52,8 @@ sealed interface EGGContainerParent : EGGComponent {
 }
 
 sealed interface EGGContainer : EGGChildComponent, EGGContainerParent {
+    override val attachment: EGGContainerAttachment
+
     fun enter(context: EGGContext): EGGContext
     fun exit(context: EGGContext) {}
 }
@@ -67,6 +83,7 @@ interface EGGSingleContainer : EGGContainer {
 }
 
 class RootContainer : EGGContainerParent {
+    override val attachment = EGGContainerAttachment()
     var child: EGGChildComponent? = null
     var size = Size.EMPTY
 

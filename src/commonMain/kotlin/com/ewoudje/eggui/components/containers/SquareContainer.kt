@@ -9,6 +9,7 @@ class SquareContainer(
     override val parent: EGGContainerParent,
     override val childId: Int
 ) : EGGSingleContainer {
+    override val attachment: EGGContainerAttachment = EGGContainerAttachment()
 
     override var child: EGGChildComponent? = null
         private set
@@ -21,9 +22,9 @@ class SquareContainer(
     }
 
     override fun getChildSize(): Size = childSize
-    override fun <T : EGGChildComponent> setChild(child: EGGChildConstructor<T>): T {
-        return child(this, 0).also { this.child = it }
-    }
+    override fun <T : EGGChildComponent> setChild(child: EGGChildConstructor<T>): T =
+        child(this, 0).also { this.child = it }
+
 
     override fun enter(context: EGGContext): EGGContext {
         var size = context.size

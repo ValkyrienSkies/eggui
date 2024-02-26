@@ -1,10 +1,7 @@
 package com.ewoudje.eggui.components.elements
 
 import com.ewoudje.eggui.*
-import com.ewoudje.eggui.components.EGGContainer
-import com.ewoudje.eggui.components.EGGContainerParent
-import com.ewoudje.eggui.components.EGGFillingElement
-import com.ewoudje.eggui.components.EGGFixedElement
+import com.ewoudje.eggui.components.*
 import com.ewoudje.eggui.frontend.ChildBuilder
 import com.ewoudje.eggui.frontend.EGGBuilderMarker
 import java.util.UUID
@@ -13,11 +10,13 @@ import kotlin.random.Random
 data class RectangleAsset(val size: CalculatedSize, val color: Int): EGGRenderAsset
 
 class RectangleElement(override val parent: EGGContainerParent, override val childId: Int) : EGGFillingElement, EGGFixedElement {
+    override val attachment: EGGElementAttachment = EGGElementAttachment()
+
     var color = 0
 
     override fun visit(context: EGGContext) {
         when (context.pass) {
-            is EGGPass.Render -> {
+            is RenderPass -> {
                 val renderer = context.pass
                 renderer.renderAsset(RectangleAsset(context.size, color), context.position)
             }
@@ -29,7 +28,3 @@ class RectangleElement(override val parent: EGGContainerParent, override val chi
 @EGGBuilderMarker
 val <T: EGGContainer> T.rectangle get() =
     ChildBuilder(this, ::RectangleElement)
-
-@EGGBuilderMarker
-fun <T: EGGContainer> T.rectangle(color: Int = Random.nextInt()) =
-    ChildBuilder(this, ::RectangleElement).wrap { it.color = color }

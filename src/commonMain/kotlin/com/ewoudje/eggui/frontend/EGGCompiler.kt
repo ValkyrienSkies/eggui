@@ -47,6 +47,9 @@ private class Trace {
 private fun traverse(comp: EGGComponent, ctx: EGGContext, trace: Trace) {
     when (comp) {
         is EGGMultipleContainer -> {
+
+            if (comp.attachment.onEnter(ctx.pass)) return
+
             val newCtx = try {
                 comp.enter(ctx)
             } catch (e: Exception) {
@@ -62,9 +65,13 @@ private fun traverse(comp: EGGComponent, ctx: EGGContext, trace: Trace) {
                 throw trace.exitError(e, comp)
             }
 
+            if (comp.attachment.onExit(ctx.pass)) return
+
             trace.exit(comp)
         }
         is EGGSingleContainer -> {
+            if (comp.attachment.onEnter(ctx.pass)) return
+
             val newCtx = try {
                 comp.enter(ctx)
             } catch (e: Exception) {
@@ -73,6 +80,8 @@ private fun traverse(comp: EGGComponent, ctx: EGGContext, trace: Trace) {
 
             trace.enter(comp)
             comp.child?.let { traverse(it, newCtx, trace) }
+
+            if (comp.attachment.onExit(ctx.pass)) return
 
             try {
                 comp.exit(newCtx)
@@ -83,6 +92,7 @@ private fun traverse(comp: EGGComponent, ctx: EGGContext, trace: Trace) {
         }
         is EGGElement -> {
             try {
+                if (comp.attachment.onVisit(ctx.pass)) return
                 comp.visit(ctx)
             } catch (e: Exception) {
                 throw trace.visitError(e, comp)
