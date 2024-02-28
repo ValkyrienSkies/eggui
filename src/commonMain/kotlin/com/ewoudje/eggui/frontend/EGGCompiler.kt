@@ -58,7 +58,7 @@ private fun traverse(comp: EGGComponent, ctx: EGGContext, trace: Trace) {
 
             trace.enter(comp)
             comp.children.forEach {
-                if (ctx.pass.shouldStop(newCtx.getPosition(it.childId))) return@forEach
+                if (ctx.pass.shouldStop(newCtx.getPosition(it.childId), newCtx.getSize(it.childId), it)) return@forEach
 
                 traverse(it, newCtx, trace)
             }

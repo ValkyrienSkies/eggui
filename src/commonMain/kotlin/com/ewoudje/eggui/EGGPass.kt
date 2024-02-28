@@ -1,7 +1,9 @@
 package com.ewoudje.eggui
 
+import com.ewoudje.eggui.components.EGGChildComponent
+
 interface EGGPass {
-    fun shouldStop(pos: Pos): Boolean = false
+    fun shouldStop(pos: Pos, size: CalculatedSize, component: EGGChildComponent): Boolean = false
 }
 interface EGGInitPass: EGGPass
 
